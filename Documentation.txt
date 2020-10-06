@@ -1,0 +1,67 @@
+Documentation for code in AFM-Image-Segmentation GitHub
+
+***************************************************************************
+adding_noise.py:
+
+This code adds artificial noise to greyscale images. Takes a path to folder
+containing the images you want to augment with noise and adds 8 different
+types of noise to these images:
+
+- Banding
+- Stripes
+- Streaking
+- Background streaking
+- Blurring
+- Inversion
+- Drift
+- Banding and stripes
+
+The augmented images are then saved in a specified folder.
+
+Paths to image folders are specified on lines 149 and 150.
+
+Streaking and background contrast require you to provide a mask, an example
+is given in this repository (mask4.tif).
+
+***************************************************************************
+***************************************************************************
+binarising.py:
+
+This code applies local mean and Otsu's threshold to greyscale images.
+Takes a path to a folder containing images and binarises these images with
+the two thresholding methods. A despeckle operation is then applied to both
+segmentations, before converting a binary image again and saving the image
+in a specified folder.
+
+Input folder specified on line 58 and output folder specified on lines 73
+and 81
+
+**************************************************************************
+**************************************************************************
+contrastnorm.py:
+
+This code normalises the contrast of greyscale images. Takes a path to a
+folder containing images and normalises the contrast by first truncating
+the values of the pixels to within 2 standard deviations of the mean, and
+then applying linear transformations such that the minimum pixel value is
+set to 0 and the max is set to 255. The normalised images are then saved in
+a specified folder.
+
+Input folder specified on line 35 and output folder specified on line 52.
+
+**************************************************************************
+**************************************************************************
+pixdiff.m:
+
+This code calculates the proportion of pixels that are different between
+two binary images. This can be used to determine how many pixels change
+when artificial noise is added. Noise augmented images must be named the
+same as their respective original images. Takes two paths to folders
+containing original and noise augmented images, calculates the proportion
+of pixels that change in the noise augmented images.
+
+Input paths are specified on lines 17 and 24. Output path specified on
+line 46.
+
+The name of the outputted dataset is specified on line 48.
+***************************************************************************
