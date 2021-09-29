@@ -64,4 +64,13 @@ Input paths are specified on lines 17 and 24. Output path specified on
 line 46.
 
 The name of the outputted dataset is specified on line 48.
+**************************************************************************
+**************************************************************************
+ModMinks.py:
+
+This code extracts the modified Minkowski functionals as described in my 
+thesis. Code currently specifies png images but can be easily changed.
+Takes two paths: folder containing images and csv file path of statistics.
+
+Input path specified on line 30. Output path specified on line 31.
 ***************************************************************************
