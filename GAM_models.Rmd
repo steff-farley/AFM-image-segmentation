@@ -1,0 +1,66 @@
+
+```{r}
+# load libraries
+
+library("splines") # for defining spline functions
+library("stringr") # for string manipulation
+library("glmnet") # for guassian linear model
+```
+
+```{r}
+# load dataset with modified Minkowski functionals calculated with ModMinks.py code and extract simulation parameter values from file names
+
+simulated_train <- read.csv("W:/Paper 2/Data/Steff simulations/Main/No liquid only/Partial IC/Stats new EC.csv")
+
+simulated_train$C <- as.double(paste("0",substr(simulated_train$name,str_locate(simulated_train$name,"_C")[,2]+1,str_locate(simulated_train$name,"_k")[,1]-1),sep="."))
+
+simulated_train$kT <- as.double(paste("0",substr(simulated_train$name,str_locate(simulated_train$name,"_kT")[,2]+1,str_locate(simulated_train$name,"_MR")[,1]-1),sep="."))
+
+simulated_train$mu0 <- as.double(paste(substr(simulated_train$name,str_locate(simulated_train$name,"_mu0")[,2]+1,str_locate(simulated_train$name,"_mu0")[,2]+1),substr(simulated_train$name,str_locate(simulated_train$name,"_mu0")[,2]+2,str_locate(simulated_train$name,"_muf")[,1]-1),sep="."))
+```
+
+```{r}
+# Define spline basis'
+
+Cbs <- bs(simulated_train$C,df=4,degree=2)
+kTbs <- bs(simulated_train$kT,df=4,degree=2)
+mu0bs <- bs(simulated_train$mu0,df=4,degree=2)
+
+bs <- matrix(0,nrow(Cbs),124)
+
+bs[,1:12] <- cbind(Cbs,kTbs,mu0bs)
+
+for (i in c(1:4)){
+  bs[,12+i] <- bs[,i]*bs[,5]
+  bs[,16+i] <- bs[,i]*bs[,6]
+  bs[,20+i] <- bs[,i]*bs[,7]
+  bs[,24+i] <- bs[,i]*bs[,8]
+  bs[,28+i] <- bs[,i]*bs[,9]
+  bs[,32+i] <- bs[,i]*bs[,10]
+  bs[,36+i] <- bs[,i]*bs[,11]
+  bs[,40+i] <- bs[,i]*bs[,12]
+  bs[,44+i] <- bs[,4+i]*bs[,9]
+  bs[,48+i] <- bs[,4+i]*bs[,10]
+  bs[,52+i] <- bs[,4+i]*bs[,11]
+  bs[,56+i] <- bs[,4+i]*bs[,12]
+}
+
+for (i in c(1:4)){
+  for (j in c(1:16)){
+    bs[,60+(i-1)*16+j] <- bs[,i]*bs[,44+j]
+  }
+}
+
+# fit multiple linear model using basis coefficients
+
+mfit <- glmnet(bs,simulated_train[,c(2,11,13)],family='mgaussian')
+```
+
+```{r}
+# we can also create three individual linear models for each modified Minkowski functional
+
+LogE.lm <- lm(LogE2~bs(C,df=4,degree=2)*bs(kT,df=4,degree=2)*bs(mu0,df=4,degree=2),data=simulated_train)
+LogP.lm <- lm(SIP2~bs(C,df=4,degree=2)*bs(kT,df=4,degree=2)*bs(mu0,df=4,degree=2),data=simulated_train)
+pctarea.lm <- lm(pctarea~bs(C,df=4,degree=2)*bs(kT,df=4,degree=2)*bs(mu0,df=4,degree=2),data=simulated_train)
+```
+
