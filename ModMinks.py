@@ -117,7 +117,7 @@ def calculate_normalised_stats(path_in,path_out):
             SIP = tot_perimeter / scaling_factor
             SIE = float(float(H0) / (float(H0)+float(H1)))
             SIP2 = SIP/(2*np.sqrt(math.pi))
-            SIE2 = float((float(H0)+float(H1))/(2*float(H)))
+            SIE2 = float((float(H0)+float(H1))/(2*float(H0)))
             LogE2 = np.log(SIE2)
 
             writer.writerow([name,pctarea,SIA,SIP,SIE,H0,H1,tot_particle_area,average_particle_size,tot_perimeter,SIP2, SIE2, LogE2])
