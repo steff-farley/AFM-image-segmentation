@@ -74,3 +74,12 @@ Takes two paths: folder containing images and csv file path of statistics.
 
 Input path specified on line 30. Output path specified on line 31.
 ***************************************************************************
+**************************************************************************
+GAM_models.Rmd:
+
+This code trains a multi-Gaussian linear model to predict modified
+Minkowski functionals from three KMC simulation parameters.
+
+A csv file with extracted modified Minkowski functionals is needed to run
+this code.
+***************************************************************************
